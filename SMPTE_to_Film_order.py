@@ -34,15 +34,15 @@ if os.path.isdir(item):
         if file.endswith(wav_ext):
             in_file = os.path.join(item, file)
             out_file = os.path.join(item, file[:-4])
-            ff = ffmpy.FFmpeg(
+            reorderFolder = ffmpy.FFmpeg(
                 inputs={in_file: None},
                 outputs={out_file + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
                 )
-            ff.run()
+            reorderFolder.run()
 
 elif os.path.isfile(item):
-    ff = ffmpy.FFmpeg(
+    reorderFile = ffmpy.FFmpeg(
         inputs={item: None},
         outputs={item[:-4] + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
         )
-    ff.run()
+    reorderFile.run()
