@@ -25,6 +25,7 @@ if len(arguments) == 0:
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", help="File/Folder for processing")
 args = parser.parse_args()
+# Initialize variables
 item = args.i
 wav_ext = '.wav'
 
