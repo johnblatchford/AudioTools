@@ -1,4 +1,5 @@
-'''
+''' 2017 John Blatchford
+
 Quick tool to remap a multi-channel RF64 wav file from:
  DOLBY SMPTE 5.1 Channel order (L R C LFE Ls Rs)
                 to
@@ -25,12 +26,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-i", help="File/Folder for processing")
 args = parser.parse_args()
 item = args.i
-file_ext = '.wav'
+wav_ext = '.wav'
 
 #figure out if arg is folder or file
 if os.path.isdir(item):
     for file in os.listdir(item):
-        if file.endswith(file_ext):
+        if file.endswith(wav_ext):
             in_file = os.path.join(item, file)
             out_file = os.path.join(item, file[:-4])
             ff = ffmpy.FFmpeg(

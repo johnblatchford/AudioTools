@@ -1,4 +1,5 @@
-'''
+''' 2017 John Blatchford
+
 Quick tool to remap a multi-channel RF64 wav file from:
  DOLBY SMPTE 5.1 Channel order (L R C LFE Ls Rs)
                 to
