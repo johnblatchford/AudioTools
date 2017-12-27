@@ -30,7 +30,7 @@ args = parser.parse_args()
 item = args.i
 wav_ext = '.wav'
 
-#figure out if arg is folder or file
+# figure out if arg is folder or file
 if os.path.isdir(item):
     for file in os.listdir(item):
         if file.endswith(wav_ext):
@@ -41,6 +41,7 @@ if os.path.isdir(item):
                 out_file = os.path.join(item, file[:-4])
                 reorderFolder = ffmpy3.FFmpeg(
                     inputs={in_file: None},
+                    # set SMPTE order
                     outputs={out_file + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
                     )
                 reorderFolder.run()
@@ -49,6 +50,7 @@ if os.path.isdir(item):
                 out_file = os.path.join(item, file[:-4])
                 reorderFolder = ffmpy3.FFmpeg(
                     inputs={in_file: None},
+                    # set SMPTE order
                     outputs={out_file + '_SMPTE.wav': "-filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
                     )
                 reorderFolder.run()
@@ -58,12 +60,14 @@ elif os.path.isfile(item):
     if read_wav.channels() == 6:
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
+            # set SMPTE order
             outputs={item[:-4] + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
             )
         reorderFile.run()
     elif read_wav.channels() == 8:
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
+            # set SMPTE order
             outputs={item[:-4] + '_SMPTE.wav': "-filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
         )
         reorderFile.run()
