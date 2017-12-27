@@ -36,7 +36,7 @@ if os.path.isdir(item):
         if file.endswith(wav_ext):
             # check to see if file is 5.1 or 7.1 for processing
             read_wav = WaveReader(file)
-            if read_wav.channels() == 6:
+            if read_wav.channels == 6:
                 in_file = os.path.join(item, file)
                 out_file = os.path.join(item, file[:-4])
                 reorderFolder = ffmpy3.FFmpeg(
@@ -45,7 +45,7 @@ if os.path.isdir(item):
                     outputs={out_file + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
                     )
                 reorderFolder.run()
-            elif read_wav.channels() == 8:
+            elif read_wav.channels == 8:
                 in_file = os.path.join(item, file)
                 out_file = os.path.join(item, file[:-4])
                 reorderFolder = ffmpy3.FFmpeg(
@@ -57,14 +57,14 @@ if os.path.isdir(item):
 
 elif os.path.isfile(item):
     read_wav = WaveReader(item)
-    if read_wav.channels() == 6:
+    if read_wav.channels == 6:
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
             # set SMPTE order
             outputs={item[:-4] + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
             )
         reorderFile.run()
-    elif read_wav.channels() == 8:
+    elif read_wav.channels == 8:
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
             # set SMPTE order
