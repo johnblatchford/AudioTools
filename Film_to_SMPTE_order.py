@@ -35,14 +35,14 @@ if os.path.isdir(item):
     for file in os.listdir(item):
         if file.endswith(wav_ext):
             # check to see if file is 5.1 or 7.1 for processing
-            read_wav = WaveReader(file)
+            read_wav = WaveReader(os.path.join(item, file))
             if read_wav.channels == 6:
                 in_file = os.path.join(item, file)
                 out_file = os.path.join(item, file[:-4])
                 reorderFolder = ffmpy3.FFmpeg(
                     inputs={in_file: None},
                     # set SMPTE order
-                    outputs={out_file + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
+                    outputs={out_file + '_SMPTE.wav': "-rf64 auto -filter 'channelmap=0|2|1|5|3|4:5.1'"}
                     )
                 reorderFolder.run()
             elif read_wav.channels == 8:
@@ -51,7 +51,7 @@ if os.path.isdir(item):
                 reorderFolder = ffmpy3.FFmpeg(
                     inputs={in_file: None},
                     # set SMPTE order
-                    outputs={out_file + '_SMPTE.wav': "-filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
+                    outputs={out_file + '_SMPTE.wav': "-rf64 auto -filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
                     )
                 reorderFolder.run()
 
@@ -61,13 +61,13 @@ elif os.path.isfile(item):
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
             # set SMPTE order
-            outputs={item[:-4] + '_SMPTE.wav': "-filter 'channelmap=0|2|1|5|3|4:5.1'"}
+            outputs={item[:-4] + '_SMPTE.wav': "-rf64 auto -filter 'channelmap=0|2|1|5|3|4:5.1'"}
             )
         reorderFile.run()
     elif read_wav.channels == 8:
         reorderFile = ffmpy3.FFmpeg(
             inputs={item: None},
             # set SMPTE order
-            outputs={item[:-4] + '_SMPTE.wav': "-filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
+            outputs={item[:-4] + '_SMPTE.wav': "-rf64 auto -filter 'channelmap=0|2|1|7|3|4|5|6:7.1'"}
         )
         reorderFile.run()
