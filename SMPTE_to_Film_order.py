@@ -9,7 +9,8 @@ Quick tool to remap a multi-channel RF64 wav file from:
  ffmpeg -i in_file.wav -filter 'channelmap=0|2|1|4|5|3:5.1' FILM.wav
 
 '''
-import ffmpy
+import ffmpy3
+from wavefile import WaveReader
 import os
 import sys
 import argparse
@@ -33,17 +34,36 @@ wav_ext = '.wav'
 if os.path.isdir(item):
     for file in os.listdir(item):
         if file.endswith(wav_ext):
-            in_file = os.path.join(item, file)
-            out_file = os.path.join(item, file[:-4])
-            reorderFolder = ffmpy.FFmpeg(
-                inputs={in_file: None},
-                outputs={out_file + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
-                )
-            reorderFolder.run()
+            # check to see if file is 5.1 or 7.1 for processing
+            read_wav = WaveReader(file)
+            if read_wav.channels() == 6:
+                in_file = os.path.join(item, file)
+                out_file = os.path.join(item, file[:-4])
+                reorderFolder = ffmpy3.FFmpeg(
+                    inputs={in_file: None},
+                    outputs={out_file + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
+                    )
+                reorderFolder.run()
+            elif read_wav.channels() == 8:
+                in_file = os.path.join(item, file)
+                out_file = os.path.join(item, file[:-4])
+                reorderFolder = ffmpy3.FFmpeg(
+                    inputs={in_file: None},
+                    outputs={out_file + '_film.wav': "-filter 'channelmap=0|2|1|4|5|6|7|3:7.1'"}
+                    )
+                reorderFolder.run()
 
 elif os.path.isfile(item):
-    reorderFile = ffmpy.FFmpeg(
-        inputs={item: None},
-        outputs={item[:-4] + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
-        )
-    reorderFile.run()
+    read_wav = WaveReader(item)
+    if read_wav.channels() == 6:
+        reorderFile = ffmpy3.FFmpeg(
+            inputs={item: None},
+            outputs={item[:-4] + '_film.wav': "-filter 'channelmap=0|2|1|4|5|3:5.1'"}
+            )
+        reorderFile.run()
+    elif read_wav.channels() == 8:
+        reorderFile = ffmpy3.FFmpeg(
+            inputs={item: None},
+            outputs={item[:-4] + '_film.wav': "-filter 'channelmap=0|2|1|4|5|6|7|3:7.1'"}
+            )
+        reorderFile.run()
